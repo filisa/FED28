@@ -18,7 +18,7 @@ submitButton.addEventListener("click", function (event) {
 		titleInput.focus();
 		return;
 	}
-
+	todoEmpty.classList.toggle("hidden");
 	const now = new Date().toISOString();
 
 	const newTask = {
@@ -33,7 +33,13 @@ submitButton.addEventListener("click", function (event) {
 	todos.push(newTask);
 	saveTodos();
 	renderCard();
+	clearInput();
 });
+
+function clearInput() {
+	titleInput.textContent = "";
+	descriptionInput.textContent = "";
+}
 
 function saveTodos() {
 	localStorage.setItem("savedToDosInTheLocalStorage", JSON.stringify(todos));
@@ -53,26 +59,41 @@ function renderCard() {
 	if (parsedToDos.length === 0) {
 		return;
 	} else {
+		todoEmpty.classList.toggle("hidden");
+		//i forgot what this was for
+		// if (TaskController.status === "done") {
+		// 	card.classList.toggle("is-done");
+		// }
+
 		for (i = 0; i < parsedToDos.length; i++) {
 			const card = document.createElement("article");
 			card.classList.toggle("task-card");
 			todoList.appendChild(card);
+
 			//render the title on the card from localStorage
 			const title = parsedToDos[i].title;
-			const cardTitle = document.createElement("span");
+			const cardTitle = document.createElement("h3");
 			cardTitle.textContent = title;
 			card.appendChild(cardTitle);
+
 			//render description from localStorage
 			const description = parsedToDos[i].description;
 			const cardDescription = document.createElement("span");
 			cardDescription.textContent = description;
 			card.appendChild(cardDescription);
-			//render description
-			todoEmpty.classList.toggle("hidden");
-
-			if (TaskController.status === "done") {
-				card.classList.toggle("is-done");
-			}
+			//render selector of status
+			const cardStatusSelectorDiv = document.createElement("div");
+			cardStatusSelectorDiv.classList.add("selector_div");
+			card.appendChild(cardStatusSelectorDiv);
+			const statusSelector = `<div class="field field-status">
+			<label for="task-status">Change status:	</label>
+			<select id="task-status">
+				<option value="todo">To do</option>
+				<option value="ongoing">Ongoing</option>
+				<option value="done">Done</option>
+			</select>
+		</div>`;
+			cardStatusSelectorDiv.innerHTML = statusSelector;
 		}
 	}
 }

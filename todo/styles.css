@@ -887,3 +887,8 @@ footer > span:first-child {
 		animation-duration: 0s !important;
 	}
 }
+
+.selector_div {
+	height: 80px;
+	padding: 2vw;
+}

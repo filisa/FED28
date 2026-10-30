@@ -6,7 +6,7 @@ const formMessage = document.getElementById("form-message");
 const todoList = document.getElementById("todo-list");
 const todoEmpty = document.getElementById("todo-empty");
 const todos = [];
-
+renderCard();
 submitButton.addEventListener("click", function (event) {
 	//trim cuts the white spaces
 	event.preventDefault();
@@ -32,6 +32,7 @@ submitButton.addEventListener("click", function (event) {
 	console.log(newTask);
 	todos.push(newTask);
 	saveTodos();
+	renderCard();
 });
 
 function saveTodos() {
@@ -47,17 +48,31 @@ function loadTodos() {
 }
 
 function renderCard() {
-	loadTodos()
+	const parsedToDos = loadTodos();
 	//render the card
-	const card = document.createElement("article");
-	card.classList.toggle("task-card");
-	todoList.appendChild(card);
-	//render the title on the card
-	const title = parsedToDos[].title;
-	//render description
-	todoEmpty.classList.toggle("hidden");
+	if (parsedToDos.length === 0) {
+		return;
+	} else {
+		for (i = 0; i < parsedToDos.length; i++) {
+			const card = document.createElement("article");
+			card.classList.toggle("task-card");
+			todoList.appendChild(card);
+			//render the title on the card from localStorage
+			const title = parsedToDos[i].title;
+			const cardTitle = document.createElement("span");
+			cardTitle.textContent = title;
+			card.appendChild(cardTitle);
+			//render description from localStorage
+			const description = parsedToDos[i].description;
+			const cardDescription = document.createElement("span");
+			cardDescription.textContent = description;
+			card.appendChild(cardDescription);
+			//render description
+			todoEmpty.classList.toggle("hidden");
 
-	if (TaskController.status === "done") {
-		card.classList.toggle("is-done");
+			if (TaskController.status === "done") {
+				card.classList.toggle("is-done");
+			}
+		}
 	}
 }

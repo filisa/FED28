@@ -3,7 +3,8 @@ const descriptionInput = document.getElementById("task-description");
 const initialStatus = document.getElementById("task-status");
 const submitButton = document.getElementById("task-submit-button");
 const formMessage = document.getElementById("form-message");
-
+const todoList = document.getElementById("todo-list");
+const todoEmpty = document.getElementById("todo-empty");
 const todos = [];
 
 submitButton.addEventListener("click", function (event) {
@@ -46,8 +47,15 @@ function loadTodos() {
 }
 
 function renderCard() {
+	loadTodos()
+	//render the card
 	const card = document.createElement("article");
 	card.classList.toggle("task-card");
+	todoList.appendChild(card);
+	//render the title on the card
+	const title = parsedToDos[].title;
+	//render description
+	todoEmpty.classList.toggle("hidden");
 
 	if (TaskController.status === "done") {
 		card.classList.toggle("is-done");

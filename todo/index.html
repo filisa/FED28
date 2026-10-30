@@ -1,136 +1,214 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" content="#f7f8f5" />
+		<title>Flowboard — Todo Tracker</title>
+		<!-- CSS controls the layout and appearance. -->
+		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js" defer></script>
+	</head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f7f8f5">
-  <title>Flowboard — Todo Tracker</title>
-  <!-- CSS controls the layout and appearance. -->
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
-</head>
+	<body>
+		<div class="app-shell">
+			<header class="topbar">
+				<div class="brand" aria-label="Flowboard">
+					<span class="brand-symbol" aria-hidden="true"
+						><i></i><i></i><i></i
+					></span>
+					<span>flowboard<span class="brand-dot">.</span></span>
+				</div>
+				<div class="storage-status" id="storage-status" role="status">
+					<span class="storage-indicator" aria-hidden="true"></span>
+					<span id="storage-label">Saved automatically in this browser</span>
+				</div>
+			</header>
+			<main>
+				<section class="intro" aria-labelledby="page-title">
+					<div class="intro-copy">
+						<span class="eyebrow"
+							>YOUR SPACE TO GET THINGS DONE <span class="eyebrow-line"></span
+						></span>
+						<h1 id="page-title">
+							Make progress,<br /><em>one task at a time.</em>
+						</h1>
+						<p>
+							Give every task a place to live. Move it from
+							<strong>To do</strong> to <strong>Ongoing</strong> to
+							<strong>Done</strong>—without losing your completed work.
+						</p>
+					</div>
+					<aside class="progress-panel" aria-label="Task progress overview">
+						<div class="progress-top">
+							<span>YOUR PROGRESS</span
+							><span class="progress-icon" aria-hidden="true">↗</span>
+						</div>
+						<div class="progress-summary">
+							<strong id="done-number">0</strong
+							><span
+								>tasks completed<br />out of
+								<strong id="total-number">0</strong> total</span
+							>
+						</div>
 
-<body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand" aria-label="Flowboard">
-        <span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>flowboard<span class="brand-dot">.</span></span>
-      </div>
-      <div class="storage-status" id="storage-status" role="status">
-        <span class="storage-indicator" aria-hidden="true"></span>
-        <span id="storage-label">Saved automatically in this browser</span>
-      </div>
-    </header>
-    <main>
-      <section class="intro" aria-labelledby="page-title">
-        <div class="intro-copy">
-          <span class="eyebrow">YOUR SPACE TO GET THINGS DONE <span class="eyebrow-line"></span></span>
-          <h1 id="page-title">Make progress,<br><em>one task at a time.</em></h1>
-          <p>Give every task a place to live. Move it from <strong>To do</strong> to <strong>Ongoing</strong> to
-            <strong>Done</strong>—without losing your completed work.
-          </p>
-        </div>
-        <aside class="progress-panel" aria-label="Task progress overview">
-          <div class="progress-top"><span>YOUR PROGRESS</span><span class="progress-icon" aria-hidden="true">↗</ span>
-          </div>
-          <div class="progress-summary"><strong id="done-number">0</strong><span>tasks completed<br>out of
-              <strong id="total-number">0</strong> total</span></div>
+						<div
+							class="progress-track"
+							role="progressbar"
+							aria-label="Tasks completed"
+							aria-valuemin="0"
+							aria-
+							valuemax="100"
+							aria-valuenow="0"
+							id="progress-track"
+						>
+							<div class="progress-fill" id="progress-fill"></div>
+						</div>
 
-          <div class="progress-track" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-
-            valuemax="100" aria-valuenow="0" id="progress-track">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
+						<div class="progress-bottom">
+							<span>EVERY STEP COUNTS</span
+							><strong id="progress-percent">0%</strong>
+						</div>
+					</aside>
+				</section>
+				<section class="add-panel" aria-labelledby="add-title">
+					<div class="add-heading">
+						<div class="add-title-group">
+							<span class="add-icon" aria-hidden="true">+</span>
+							<div>
+								<h2 id="add-title">Add a new task</h2>
+								<p>
+									Keep it simple. You can change its status or edit it later.
+								</p>
+							</div>
+						</div>
+					</div>
 
-          <div class="progress-bottom"><span>EVERY STEP COUNTS</span><strong id="progress-percent">0%</strong></div>
-        </aside>
-      </section>
-      <section class="add-panel" aria-labelledby="add-title">
-        <div class="add-heading">
-          <div class="add-title-group">
-            <span class="add-icon" aria-hidden="true">+</span>
-            <div>
-              <h2 id="add-title">Add a new task</h2>
-              <p>Keep it simple. You can change its status or edit it
-                later.</p>
-            </div>
-          </div>
-        </div>
-
-        <form id="task-form" class="task-form">
-          <div class="field field-name">
-            <label for="task-title">Task name <span class="required">*</span></label>
-            <input type="text" id="task-title" maxlength="90" placeholder="e.g. Finish the JavaScript
-assignment" autocomplete="off" required>
-          </div>
-          <div class="field field-description">
-            <label for="task-description">Notes <span class="optional">(optional)</span></label>
-            <input type="text" id="task-description" maxlength="160" placeholder="Add a little detail..."
-              autocomplete="off">
-          </div>
-          <div class="field field-status">
-            <label for="task-status">Start in</label>
-            <select id="task-status">
-              <option value="todo">To do</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="done">Done</option>
-            </select>
-          </div>
-          <button type="submit" class="add-button"><span aria-hidden="true">+</span> Add task</button>
-        </form>
-        <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
-      </section>
-      <section class="board-section" aria-labelledby="board-title">
-        <div class="board-heading">
-          <div><span class="section-kicker">KEEP THINGS MOVING</span>
-            <h2 id="board-title">Your task board</h2>
-          </div>
-          <p><span class="board-note-dot" aria-hidden="true"></span> Done tasks stay here, even after a
-            refresh.</p>
-        </div>
-        <div class="board">
-          <section class="lane lane-todo" aria-labelledby="todo-heading">
-            <header class="lane-header">
-              <div class="lane-name"><span class="lane-symbol symbol-todo" aria-hidden="true">○</span>
-                <h3 id="todo-heading">To do</h3>
-              </div>
-              <span class="count" id="todo-count">0</span>
-            </header>
-            <p class="lane-caption">Ideas and tasks ready to start</p>
-            <div class="task-list" id="todo-list"></div>
-            <div class="empty-state" id="todo-empty"><span class="empty-art" aria-hidden="true">✧</ span><strong>All
-                  clear for now</strong><span>New tasks will show up here.</span></div>
-          </section>
-          <section class="lane lane-ongoing" aria-labelledby="ongoing-heading">
-            <header class="lane-header">
-              <div class="lane-name"><span class="lane-symbol symbol-ongoing" aria-hidden="true">◐</span>
-                <h3 id="ongoing-heading">Ongoing</h3>
-              </div>
-              <span class="count" id="ongoing-count">0</span>
-            </header>
-            <p class="lane-caption">What you're working on now</p>
-            <div class="task-list" id="ongoing-list"></div>
-            <div class="empty-state" id="ongoing-empty"><span class="empty-art" aria-hidden="true">↗</ span>
-                <strong>Nothing in motion</strong><span>Start a task to move it here.</span></div>
-          </section>
-          <section class="lane lane-done" aria-labelledby="done-heading">
-            <header class="lane-header">
-              <div class="lane-name"><span class="lane-symbol symbol-done" aria-hidden="true">✓</span>
-                <h3 id="done-heading">Done</h3>
-              </div>
-              <span class="count" id="done-count">0</span>
-            </header>
-            <p class="lane-caption">Completed and worth keeping</p>
-            <div class="task-list" id="done-list"></div>
-            <div class="empty-state" id="done-empty"><span class="empty-art" aria-hidden="true">★</ span><strong>Wins
-                  appear here</strong><span>Completed tasks won't disappear.</span></div>
-          </section>
-        </div>
-      </section>
-    </main>
-    <footer><span>flowboard<span class="brand-dot">.</span></span> <span>Made with HTML, CSS &amp; vanilla
-        JavaScript. Stored locally in your browser.</span></footer>
-  </div>
-</body>
+					<form id="task-form" class="task-form">
+						<div class="field field-name">
+							<label for="task-title"
+								>Task name <span class="required">*</span></label
+							>
+							<input
+								type="text"
+								id="task-title"
+								maxlength="90"
+								placeholder="e.g. Finish the JavaScript
+assignment"
+								autocomplete="off"
+								required
+							/>
+						</div>
+						<div class="field field-description">
+							<label for="task-description"
+								>Notes <span class="optional">(optional)</span></label
+							>
+							<input
+								type="text"
+								id="task-description"
+								maxlength="160"
+								placeholder="Add a little detail..."
+								autocomplete="off"
+							/>
+						</div>
+						<div class="field field-status">
+							<label for="task-status">Start in</label>
+							<select id="task-status">
+								<option value="todo">To do</option>
+								<option value="ongoing">Ongoing</option>
+								<option value="done">Done</option>
+							</select>
+						</div>
+						<button id="task-submit-button" type="submit" class="add-button">
+							<span aria-hidden="true">+</span> Add task
+						</button>
+					</form>
+					<p
+						class="form-message"
+						id="form-message"
+						role="status"
+						aria-live="polite"
+					></p>
+				</section>
+				<section class="board-section" aria-labelledby="board-title">
+					<div class="board-heading">
+						<div>
+							<span class="section-kicker">KEEP THINGS MOVING</span>
+							<h2 id="board-title">Your task board</h2>
+						</div>
+						<p>
+							<span class="board-note-dot" aria-hidden="true"></span> Done tasks
+							stay here, even after a refresh.
+						</p>
+					</div>
+					<div class="board">
+						<section class="lane lane-todo" aria-labelledby="todo-heading">
+							<header class="lane-header">
+								<div class="lane-name">
+									<span class="lane-symbol symbol-todo" aria-hidden="true"
+										>○</span
+									>
+									<h3 id="todo-heading">To do</h3>
+								</div>
+								<span class="count" id="todo-count">0</span>
+							</header>
+							<p class="lane-caption">Ideas and tasks ready to start</p>
+							<div class="task-list" id="todo-list"></div>
+							<div class="empty-state" id="todo-empty">
+								<span class="empty-art" aria-hidden="true">✧</span
+								><strong>All clear for now</strong
+								><span>New tasks will show up here.</span>
+							</div>
+						</section>
+						<section
+							class="lane lane-ongoing"
+							aria-labelledby="ongoing-heading"
+						>
+							<header class="lane-header">
+								<div class="lane-name">
+									<span class="lane-symbol symbol-ongoing" aria-hidden="true"
+										>◐</span
+									>
+									<h3 id="ongoing-heading">Ongoing</h3>
+								</div>
+								<span class="count" id="ongoing-count">0</span>
+							</header>
+							<p class="lane-caption">What you're working on now</p>
+							<div class="task-list" id="ongoing-list"></div>
+							<div class="empty-state" id="ongoing-empty">
+								<span class="empty-art" aria-hidden="true">↗</span>
+								<strong>Nothing in motion</strong
+								><span>Start a task to move it here.</span>
+							</div>
+						</section>
+						<section class="lane lane-done" aria-labelledby="done-heading">
+							<header class="lane-header">
+								<div class="lane-name">
+									<span class="lane-symbol symbol-done" aria-hidden="true"
+										>✓</span
+									>
+									<h3 id="done-heading">Done</h3>
+								</div>
+								<span class="count" id="done-count">0</span>
+							</header>
+							<p class="lane-caption">Completed and worth keeping</p>
+							<div class="task-list" id="done-list"></div>
+							<div class="empty-state" id="done-empty">
+								<span class="empty-art" aria-hidden="true">★</span
+								><strong>Wins appear here</strong
+								><span>Completed tasks won't disappear.</span>
+							</div>
+						</section>
+					</div>
+				</section>
+			</main>
+			<footer>
+				<span>flowboard<span class="brand-dot">.</span></span>
+				<span
+					>Made with HTML, CSS &amp; vanilla JavaScript. Stored locally in your
+					browser.</span
+				>
+			</footer>
+		</div>
+	</body>
 </html>

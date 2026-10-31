@@ -5,8 +5,17 @@ const submitButton = document.getElementById("task-submit-button");
 const formMessage = document.getElementById("form-message");
 const todoList = document.getElementById("todo-list");
 const todoEmpty = document.getElementById("todo-empty");
-const todos = [];
+const ongoingEmpty = document.getElementById("ongoing-empty");
+const doneEmpty = document.getElementById("done-empty");
+const ongoingList = document.getElementById("ongoing-list");
+const doneList = document.getElementById("done-list");
+
+//at the start we look if we have any data in localStorage
+//and add it to the array
+const todos = loadTodos();
+//then we render this data if there is any
 renderCard();
+
 submitButton.addEventListener("click", function (event) {
 	//trim cuts the white spaces
 	event.preventDefault();
@@ -18,7 +27,6 @@ submitButton.addEventListener("click", function (event) {
 		titleInput.focus();
 		return;
 	}
-	todoEmpty.classList.toggle("hidden");
 	const now = new Date().toISOString();
 
 	const newTask = {
@@ -37,8 +45,8 @@ submitButton.addEventListener("click", function (event) {
 });
 
 function clearInput() {
-	titleInput.textContent = "";
-	descriptionInput.textContent = "";
+	titleInput.value = "";
+	descriptionInput.value = "";
 }
 
 function saveTodos() {
@@ -54,30 +62,52 @@ function loadTodos() {
 }
 
 function renderCard() {
-	const parsedToDos = loadTodos();
-	//render the card
-	if (parsedToDos.length === 0) {
+	//if we don't do this the cards are rendered each
+	// time I add a new card on top of what we had already
+	todoList.replaceChildren();
+	ongoingList.replaceChildren();
+	doneList.replaceChildren();
+
+	//make sure the empty states are shown if there is nothing in one section
+	todoEmpty.classList.toggle("hidden", false);
+	ongoingEmpty.classList.toggle("hidden", false);
+	doneEmpty.classList.toggle("hidden", false);
+
+	if (todos.length === 0) {
 		return;
 	} else {
-		todoEmpty.classList.toggle("hidden");
-		//i forgot what this was for
-		// if (TaskController.status === "done") {
-		// 	card.classList.toggle("is-done");
-		// }
-
-		for (i = 0; i < parsedToDos.length; i++) {
+		for (i = 0; i < todos.length; i++) {
 			const card = document.createElement("article");
 			card.classList.toggle("task-card");
-			todoList.appendChild(card);
+			let eventType = todos[i].status;
+			switch (eventType) {
+				case "todo":
+					//render the card inside todo
+					todoList.appendChild(card);
+					todoEmpty.classList.toggle("hidden", true);
+					break;
+				case "ongoing":
+					//render inside ongoing column
+					ongoingList.appendChild(card);
+					ongoingEmpty.classList.toggle("hidden", true);
+					break;
+				case "done":
+					//render in done
+					doneList.appendChild(card);
+					doneEmpty.classList.toggle("hidden", true);
+					break;
+				default:
+					console.log(`Unsupported type of status: ${eventType}`);
+			}
 
-			//render the title on the card from localStorage
-			const title = parsedToDos[i].title;
+			//render the title on the card
+			const title = todos[i].title;
 			const cardTitle = document.createElement("h3");
 			cardTitle.textContent = title;
 			card.appendChild(cardTitle);
 
-			//render description from localStorage
-			const description = parsedToDos[i].description;
+			//render description
+			const description = todos[i].description;
 			const cardDescription = document.createElement("span");
 			cardDescription.textContent = description;
 			card.appendChild(cardDescription);
@@ -85,14 +115,16 @@ function renderCard() {
 			const cardStatusSelectorDiv = document.createElement("div");
 			cardStatusSelectorDiv.classList.add("selector_div");
 			card.appendChild(cardStatusSelectorDiv);
-			const statusSelector = `<div class="field field-status">
-			<label for="task-status">Change status:	</label>
-			<select id="task-status">
-				<option value="todo">To do</option>
-				<option value="ongoing">Ongoing</option>
-				<option value="done">Done</option>
-			</select>
-		</div>`;
+			const statusSelector = `
+			<div class="field field-status">
+				<label for="task-status">Change status:	</label>
+				<select id="task-status">
+					<option value="todo">To do</option>
+					<option value="ongoing">Ongoing</option>
+					<option value="done">Done</option>
+				</select>
+			</div>
+			`;
 			cardStatusSelectorDiv.innerHTML = statusSelector;
 		}
 	}

@@ -3,12 +3,12 @@
 ======================================== */
 
 :root {
-	--ink: #18332e;
-	--muted: #21352d;
-	--bg: #0d0e0d;
+	--ink: #3b625d;
+	--muted: #daecec;
+	--bg: #b1cec0;
 	--line: #417741;
-	--mint: #28342c;
-	--teal: #0c3e31;
+	--mint: #8ed3c2;
+	--teal: #20594a;
 	--shadow: 0 8px 32px rgba(31, 57, 44, 0.04);
 }
 
@@ -577,10 +577,11 @@ select:focus-visible {
 ======================================== */
 
 .task-card {
-	background: white;
+	background: rgb(199, 220, 216);
 	border: 1px solid rgba(55, 75, 60, 0.06);
 	border-radius: 12px;
-	padding: 15px 14px 13px;
+	padding: 15px 14px 19px;
+	text-align: left;
 	box-shadow: 0 3px 13px rgba(39, 52, 42, 0.035);
 }
 

@@ -9,6 +9,7 @@ const ongoingEmpty = document.getElementById("ongoing-empty");
 const doneEmpty = document.getElementById("done-empty");
 const ongoingList = document.getElementById("ongoing-list");
 const doneList = document.getElementById("done-list");
+const board = document.getElementById("board");
 
 //at the start we look if we have any data in localStorage
 //and add it to the array
@@ -79,6 +80,7 @@ function renderCard() {
 		for (i = 0; i < todos.length; i++) {
 			const card = document.createElement("article");
 			card.classList.toggle("task-card");
+			card.id = todos[i].id;
 			let eventType = todos[i].status;
 			switch (eventType) {
 				case "todo":
@@ -129,3 +131,22 @@ function renderCard() {
 		}
 	}
 }
+//listen for status changes inside the kanban board
+board.addEventListener("change", function (event) {
+	const select = event.target;
+	const card = select.closest(".task-card");
+
+	const taskInsideTheArray = todos.find(findTask);
+	function findTask(task) {
+		return task.id === card.id;
+	}
+	if (!taskInsideTheArray) {
+		return;
+	} else {
+		taskInsideTheArray.status = event.target.value;
+		//write changes in the local storage
+		saveTodos();
+		//re-render all the cards
+		renderCard();
+	}
+});

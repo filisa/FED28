@@ -38,7 +38,6 @@ submitButton.addEventListener("click", function (event) {
 		status: status,
 		completedAt: null
 	};
-	console.log(newTask);
 	todos.push(newTask);
 	saveTodos();
 	renderCard();
@@ -120,7 +119,7 @@ function renderCard() {
 			const statusSelector = `
 			<div class="field field-status">
 				<label for="task-status">Change status:	</label>
-				<select id="task-status">
+				<select class="task-status">
 					<option value="todo">To do</option>
 					<option value="ongoing">Ongoing</option>
 					<option value="done">Done</option>
@@ -128,6 +127,11 @@ function renderCard() {
 			</div>
 			`;
 			cardStatusSelectorDiv.innerHTML = statusSelector;
+			const cardStatusSelect =
+				cardStatusSelectorDiv.querySelector(".task-status");
+			console.log(cardStatusSelect);
+			cardStatusSelect.value = todos[i].status;
+			console.log(cardStatusSelect.value);
 		}
 	}
 }
@@ -135,7 +139,6 @@ function renderCard() {
 board.addEventListener("change", function (event) {
 	const select = event.target;
 	const card = select.closest(".task-card");
-
 	const taskInsideTheArray = todos.find(findTask);
 	function findTask(task) {
 		return task.id === card.id;
@@ -150,3 +153,4 @@ board.addEventListener("change", function (event) {
 		renderCard();
 	}
 });
+//selected

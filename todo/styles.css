@@ -577,6 +577,7 @@ select:focus-visible {
 ======================================== */
 
 .task-card {
+	position: relative;
 	background: rgb(199, 220, 216);
 	border: 1px solid rgba(55, 75, 60, 0.06);
 	border-radius: 12px;
@@ -892,4 +893,13 @@ footer > span:first-child {
 .selector_div {
 	height: 80px;
 	padding: 2vw;
+}
+
+.delete-task {
+	border: none;
+	width: fit-content;
+	position: absolute;
+	top: 1vw;
+	right: 1vw;
+	background-color: transparent;
 }

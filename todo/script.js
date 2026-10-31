@@ -76,7 +76,7 @@ function renderCard() {
 	if (todos.length === 0) {
 		return;
 	} else {
-		for (i = 0; i < todos.length; i++) {
+		for (let i = 0; i < todos.length; i++) {
 			const card = document.createElement("article");
 			card.classList.toggle("task-card");
 			card.id = todos[i].id;
@@ -112,6 +112,25 @@ function renderCard() {
 			const cardDescription = document.createElement("span");
 			cardDescription.textContent = description;
 			card.appendChild(cardDescription);
+
+			//render delete button
+			const deleteButton = document.createElement("button");
+			deleteButton.classList.add("delete-task");
+			deleteButton.type = "button";
+			deleteButton.textContent = "✖️";
+			card.appendChild(deleteButton);
+			deleteButton.addEventListener("click", function () {
+				const taskIndex = todos.findIndex(function (task) {
+					return task.id === card.id;
+				});
+				if (taskIndex === -1) {
+					return;
+				}
+				todos.splice(taskIndex, 1);
+				saveTodos();
+				renderCard();
+			});
+
 			//render selector of status
 			const cardStatusSelectorDiv = document.createElement("div");
 			cardStatusSelectorDiv.classList.add("selector_div");
@@ -129,9 +148,7 @@ function renderCard() {
 			cardStatusSelectorDiv.innerHTML = statusSelector;
 			const cardStatusSelect =
 				cardStatusSelectorDiv.querySelector(".task-status");
-			console.log(cardStatusSelect);
 			cardStatusSelect.value = todos[i].status;
-			console.log(cardStatusSelect.value);
 		}
 	}
 }
@@ -153,4 +170,5 @@ board.addEventListener("change", function (event) {
 		renderCard();
 	}
 });
-//selected
+
+//add an option to delete the card.

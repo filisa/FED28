@@ -3,6 +3,8 @@ const descriptionInput = document.getElementById("task-description");
 const initialStatus = document.getElementById("task-status");
 const submitButton = document.getElementById("task-submit-button");
 const formMessage = document.getElementById("form-message");
+
+//kanban board
 const todoList = document.getElementById("todo-list");
 const todoEmpty = document.getElementById("todo-empty");
 const ongoingEmpty = document.getElementById("ongoing-empty");
@@ -10,6 +12,11 @@ const doneEmpty = document.getElementById("done-empty");
 const ongoingList = document.getElementById("ongoing-list");
 const doneList = document.getElementById("done-list");
 const board = document.getElementById("board");
+//progress bar
+const totalNumber = document.getElementById("total-number");
+const doneNumber = document.getElementById("done-number");
+const progressPercent = document.getElementById("progress-percent");
+const progressFill = document.getElementById("progress-fill");
 
 //at the start we look if we have any data in localStorage
 //and add it to the array
@@ -151,6 +158,7 @@ function renderCard() {
 			cardStatusSelect.value = todos[i].status;
 		}
 	}
+	updateProgressBarNumbers();
 }
 //listen for status changes inside the kanban board
 board.addEventListener("change", function (event) {
@@ -170,3 +178,20 @@ board.addEventListener("change", function (event) {
 		renderCard();
 	}
 });
+
+function updateProgressBarNumbers() {
+	totalNumber.textContent = todos.length;
+	const doneTasksArray = todos.filter(function (task) {
+		return task.status === "done";
+	});
+	doneNumber.textContent = doneTasksArray.length;
+	const allTasks = todos.length;
+	const doneTasks = doneTasksArray.length;
+	const progressPercentNumber = Math.round((doneTasks * 100) / allTasks);
+	progressPercent.textContent = `${progressPercentNumber}%`;
+	progressFill.style.width = `${progressPercentNumber}%`;
+}
+
+//Now the only thing left is to do the progress bar.
+//Take the .progress-fill  style in CSS and change it's width?
+//First assume the width is 0% and then update it according to progressPercentNumber.

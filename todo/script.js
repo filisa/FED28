@@ -170,5 +170,3 @@ board.addEventListener("change", function (event) {
 		renderCard();
 	}
 });
-
-//add an option to delete the card.

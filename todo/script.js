@@ -12,6 +12,10 @@ const doneEmpty = document.getElementById("done-empty");
 const ongoingList = document.getElementById("ongoing-list");
 const doneList = document.getElementById("done-list");
 const board = document.getElementById("board");
+const todoCount = document.getElementById("todo-count");
+const ongoingCount = document.getElementById("ongoing-count");
+const doneCount = document.getElementById("done-count");
+
 //progress bar
 const totalNumber = document.getElementById("total-number");
 const doneNumber = document.getElementById("done-number");
@@ -81,6 +85,8 @@ function renderCard() {
 	doneEmpty.classList.toggle("hidden", false);
 
 	if (todos.length === 0) {
+		updateProgressBarNumbers();
+		updateNumberOfTasksInColumns();
 		return;
 	} else {
 		for (let i = 0; i < todos.length; i++) {
@@ -159,6 +165,7 @@ function renderCard() {
 		}
 	}
 	updateProgressBarNumbers();
+	updateNumberOfTasksInColumns();
 }
 //listen for status changes inside the kanban board
 board.addEventListener("change", function (event) {
@@ -185,13 +192,30 @@ function updateProgressBarNumbers() {
 		return task.status === "done";
 	});
 	doneNumber.textContent = doneTasksArray.length;
-	const allTasks = todos.length;
+	let allTasks = todos.length;
 	const doneTasks = doneTasksArray.length;
-	const progressPercentNumber = Math.round((doneTasks * 100) / allTasks);
+	let progressPercentNumber;
+	if (allTasks === 0) {
+		progressPercentNumber = 0;
+	} else {
+		progressPercentNumber = Math.round((doneTasks * 100) / allTasks);
+	}
 	progressPercent.textContent = `${progressPercentNumber}%`;
 	progressFill.style.width = `${progressPercentNumber}%`;
 }
 
-//Now the only thing left is to do the progress bar.
-//Take the .progress-fill  style in CSS and change it's width?
-//First assume the width is 0% and then update it according to progressPercentNumber.
+//increminate the number of tasks in the column
+function updateNumberOfTasksInColumns() {
+	const todoTasksArray = todos.filter(function (task) {
+		return task.status === "todo";
+	});
+	const ongoingTasksArray = todos.filter(function (task) {
+		return task.status === "ongoing";
+	});
+	const doneTasksArray = todos.filter(function (task) {
+		return task.status === "done";
+	});
+	todoCount.textContent = todoTasksArray.length;
+	ongoingCount.textContent = ongoingTasksArray.length;
+	doneCount.textContent = doneTasksArray.length;
+}
